@@ -23,7 +23,7 @@ jobs:
     - name: Setup terragrunt HCL
       uses: gruntwork-io/terragrunt-action@v1
        with:
-          tf_version: '1.4.6'
+          tf_version: 1.4.6
 
     - name: Run Terragrunt
       run: |
