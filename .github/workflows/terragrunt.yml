@@ -33,7 +33,7 @@ jobs:
 
     - name: Run Terragrunt
       run: |
-        cd ./root 
+        cd root 
         terragrunt init
         terragrunt plan
         terragrunt run-all apply
