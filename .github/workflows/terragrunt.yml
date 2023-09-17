@@ -20,16 +20,12 @@ jobs:
       with:
           terraform_version: 1.5.5
 
-    - name: Setup terragrunt HCL
-      uses: gruntwork-io/terragrunt-action@v1
-      with:
-          tf_version: 1.4.6
-          tg_version: 0.46.3
-          tg_dir: 'root'
-          tg_command: 'init'
-      env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Install Terragrunt
+      run: |
+        wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
+        chmod +x terragrunt_linux_amd64
+        mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+        terragrunt --version
 
     - name: Run Terragrunt
       run: |
