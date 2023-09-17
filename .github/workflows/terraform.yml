@@ -25,6 +25,7 @@ jobs:
       with:
           tf_version: 1.4.6
           tg_version: 0.46.3
+          tg_command: 'init'
 
     - name: Run Terragrunt
       run: |
