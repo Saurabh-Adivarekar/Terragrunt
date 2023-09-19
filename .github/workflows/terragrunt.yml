@@ -53,6 +53,7 @@ jobs:
     steps:
       - name: Run Terragrunt Apply
         run: |
+          pwd
           cd ./root
           terragrunt run-all apply --terragrunt-non-interactive
 
