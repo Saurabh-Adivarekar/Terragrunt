@@ -36,7 +36,6 @@ jobs:
           cd root 
           terragrunt init
           terragrunt plan
-          # Do not run 'terragrunt apply' here
 
   manual_approval:
     needs: terragrunt
@@ -54,6 +53,6 @@ jobs:
     steps:
       - name: Run Terragrunt Apply
         run: |
-          cd root
+          cd ./root
           terragrunt run-all apply --terragrunt-non-interactive
 
