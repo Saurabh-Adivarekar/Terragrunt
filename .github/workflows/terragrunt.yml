@@ -7,30 +7,50 @@ on:
 jobs:
   terragrunt:
     runs-on: ubuntu-latest
-    
-    steps:
-    
-    - name: Checkout 
-      uses: actions/checkout@v3
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
           terraform_version: 1.5.5
 
-    - name: Install & Setup Terragrunt
-      run: |
-        wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
-        chmod +x terragrunt_linux_amd64
-        mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
-        terragrunt --version
+      - name: Install & Setup Terragrunt
+        run: |
+          wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.32.0/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
 
-    - name: Run Terragrunt 
-      run: |
-        cd root 
-        terragrunt init
-        terragrunt plan
-        terragrunt run-all apply --terragrunt-non-interactive
-      env:
+      - name: Run Terragrunt 
+        run: |
+          cd root 
+          terragrunt init
+          terragrunt plan
+          # Do not run 'terragrunt apply' here
+
+  manual_approval:
+    needs: terragrunt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Manual Approval
+        id: approval
+        run: echo "Please review the Terragrunt plan and approve if everything looks good."
+
+      - name: Wait for Approval
+        id: wait
+        run: sleep 60 # Wait for 60 seconds for manual approval
+
+  apply:
+    needs: manual_approval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Terragrunt Apply
+        run: |
+          cd root
+          terragrunt run-all apply --terragrunt-non-interactive
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
