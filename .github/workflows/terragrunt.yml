@@ -3,6 +3,7 @@ name: Terraform Workflow with Terragrunt
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   terragrunt:
